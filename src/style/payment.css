@@ -1,0 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+.payment {
+  background: linear-gradient(
+    to right,
+    rgba(135, 206, 250) 52%,
+    rgba(100, 149, 237) 53%,
+    rgba(0, 0, 225, 1) 100%
+  );
+  font-family: "Roboto", sans-serif;
+}
+
+.payment__card {
+  border: none;
+  max-width: 450px;
+  border-radius: 15px;
+  margin: 150px 0 150px;
+  padding: 35px;
+  padding-bottom: 20px !important;
+}
+
+.payment_heading {
+  color: #c1c1c1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.card__img {
+  transform: translate(160px, -10px);
+}
+
+.card__img:hover {
+  cursor: pointer;
+}
+
+.text-warning {
+  font-size: 12px;
+  font-weight: 500;
+  color: #edb537 !important;
+}
+
+.card__input {
+  border-bottom: 1.5px solid #e8e5d2 !important;
+  font-weight: bold;
+  border-radius: 0;
+  border: 0;
+}

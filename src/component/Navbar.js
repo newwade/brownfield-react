@@ -17,7 +17,9 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-primary">
       <div className="container-fluid">
-        <a className="navbar-brand text-light">Brownfield Airlines</a>
+        <Link to="/" className="navbar-brand text-light">
+          Brownfield Airlines
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -32,9 +34,9 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link text-light" aria-current="page">
+              <Link to="/" className="nav-link text-light" aria-current="page">
                 Home
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
               <a className="nav-link text-light">Checkin</a>
