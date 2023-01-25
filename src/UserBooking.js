@@ -20,7 +20,6 @@ function UserBooking() {
       console.log(error.message);
     }
   };
-  console.log(bookingData);
 
   useEffect(() => {
     fetchUserBookingData();
@@ -36,15 +35,15 @@ function UserBooking() {
     <div className="container ">
       {bookingData.length > 0
         ? bookingData.map((booking, i) => (
-            <div class="card mt-3 border">
-              <div class="card-body">
+            <div key={booking.bookingId} className="card mt-3 border">
+              <div className="card-body">
                 <div className="d-flex justify-content-between">
-                  <h5 class="card-title">
-                    {booking.origin} <span>-></span>
+                  <h5 className="card-title">
+                    {booking.origin} <span>{" -> "}</span>
                     {booking.destination}
                   </h5>
                   <h5>
-                    {booking.departureTime} <span>-></span>
+                    {booking.departureTime} <span> {" -> "} </span>
                     {booking.arrivalTime}
                   </h5>
                 </div>
@@ -63,7 +62,10 @@ function UserBooking() {
                 </div>
                 {booking.passengers.map((passenger, i) => {
                   return (
-                    <div className="d-flex justify-content-between">
+                    <div
+                      key={passenger.passengerId}
+                      className="d-flex justify-content-between text-muted"
+                    >
                       <div className="d-flex">
                         <p className="card-text">Passenger : </p>
                         <p className="card-text">
@@ -76,8 +78,8 @@ function UserBooking() {
                   );
                 })}
 
-                <p class="card-text">
-                  <small class="text-muted">{booking.bookingDate}</small>
+                <p className="card-text">
+                  <small className="text-muted">{booking.bookingDate}</small>
                 </p>
               </div>
             </div>
