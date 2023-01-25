@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SELECT, SET_COUNT } from "./store/flight/flightSlice";
+import { ToastContainer, toast, Slide } from "react-toastify";
 import "./style/home.css";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [flights, setFlights] = useState([]);
@@ -41,6 +43,10 @@ export default function Home() {
       }
     } catch (error) {
       setError(error.message);
+      setFlights([]);
+      toast.warning(error.message, {
+        transition: Slide,
+      });
       console.log(error);
     }
   };
@@ -53,6 +59,12 @@ export default function Home() {
   };
   return (
     <div className="App">
+      <ToastContainer
+        position="top-center"
+        autoClose={500}
+        hideProgressBar={true}
+        newestOnTop={true}
+      />
       <div className="container ">
         <div className="row vh-100">
           <div className="col-md-4 column d-flex flex-column justify-content-center align-items-center">
@@ -149,6 +161,11 @@ export default function Home() {
                 })}
               </tbody>
             </table>
+            {flights.length <= 0 ? (
+              <p className="text-secondary text-center">No Flight Found</p>
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>

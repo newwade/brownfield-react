@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast, Slide } from "react-toastify";
 import "./style/payment.css";
 
 function Payment() {
@@ -43,12 +44,20 @@ function Payment() {
         });
       }
     } catch (error) {
-      alert(error.message);
+      toast.warning(error.message, {
+        transition: Slide,
+      });
       console.log(error);
     }
   };
   return (
     <div className="payment">
+      <ToastContainer
+        position="top-center"
+        autoClose={500}
+        hideProgressBar={true}
+        newestOnTop={true}
+      />
       <div className="container-fluid">
         <div className="row d-flex justify-content-center">
           <div className="col-sm-12">
@@ -66,6 +75,7 @@ function Payment() {
                     size="17"
                     minLength="16"
                     maxLength="16"
+                    required
                   />
                   <img
                     className="card__img"
@@ -84,6 +94,7 @@ function Payment() {
                     type="text"
                     placeholder="Name"
                     size="17"
+                    required
                   />
                 </div>
                 <div className="form-group pt-2">
@@ -99,6 +110,7 @@ function Payment() {
                         id="exp"
                         minLength="7"
                         maxLength="7"
+                        required
                       />
                     </div>
                     <div className="col-sm-3">
@@ -112,6 +124,7 @@ function Payment() {
                         size="1"
                         minLength="3"
                         maxLength="3"
+                        required
                       />
                     </div>
                     <div className="text-center text-lg-start mt-4 pt-2">

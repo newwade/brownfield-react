@@ -8,11 +8,11 @@ export default function Signup() {
   const [error, setError] = useState();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (user) {
-  //     return navigate("/");
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (user) {
+      return navigate("/");
+    }
+  });
 
   const handleUserRegistration = async (e) => {
     e.preventDefault();

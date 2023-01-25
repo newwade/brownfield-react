@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import PassengerForm from "./component/PassengerForm";
 import { ADD_PASSENGER, SELECT } from "./store/flight/flightSlice";
+import { ToastContainer, toast, Slide } from "react-toastify";
 
 function Book() {
   const { count } = useSelector((state) => state.flight);
@@ -10,7 +11,10 @@ function Book() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [flight, setFlight] = useState();
+
   useEffect(() => {
     if (!user) {
       return navigate("/login");
@@ -19,6 +23,7 @@ function Book() {
 
   const getPassengers = async () => {
     try {
+      setLoading(true);
       const forms = document.querySelectorAll("#passenger_form");
       const requestData = [];
       forms.forEach((form) => {
@@ -38,7 +43,12 @@ function Book() {
       }
     } catch (error) {
       console.log(error.message);
-      alert(error.message);
+      setError(error.message);
+      toast.warning(error.message, {
+        transition: Slide,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,6 +65,7 @@ function Book() {
       }
     } catch (error) {
       console.log(error.message);
+      setError(error.message);
       navigate("*", { replace: true });
     }
   };
@@ -62,9 +73,14 @@ function Book() {
   useEffect(() => {
     getFlight();
   }, []);
-
   return (
     <div className="container">
+      <ToastContainer
+        position="top-center"
+        autoClose={500}
+        hideProgressBar={true}
+        newestOnTop={true}
+      />
       <div className="row">
         <div className="col-8 d-flex flex-column ">
           <h5>Passenger Details</h5>
@@ -108,7 +124,7 @@ function Book() {
             </div>
             <button
               onClick={getPassengers}
-              className="btn btn-primary btn-book"
+              className={`btn btn-primary btn-book ${loading && "disabled"} `}
             >
               Continue
             </button>
