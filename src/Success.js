@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./style/success.css";
 
 function Success() {
+  const { id } = useParams();
+
   return (
     <div className="container booking_confirm">
       <div className="printer-top"></div>
@@ -28,7 +30,7 @@ function Success() {
             </div>
             <div className="order-details">
               <div className="order-number-label">Transaction ID</div>
-              <div className="order-number">123456789</div>
+              <div className="order-number">{id}</div>
               <div className="complement">Thank You!</div>
             </div>
           </div>

@@ -3,9 +3,11 @@ import Book from "./Book";
 import Navbar from "./component/Navbar";
 import Home from "./Home";
 import Login from "./Login";
+import PageNotFound from "./PageNotFound";
 import Payment from "./Payment";
 import Signup from "./Signup";
 import Success from "./Success";
+import UserBooking from "./UserBooking";
 
 function App() {
   return (
@@ -15,9 +17,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/travel/:id" element={<Book />} />
+        <Route path="/booking" element={<UserBooking />} />
+        <Route path="/flight/:id" element={<Book />} />
         <Route path="/payment" element={<Payment />} />
-        <Route path="/payment/success" element={<Success />} />
+        <Route path="/payment/success/:id" element={<Success />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
   );

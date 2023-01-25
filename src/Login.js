@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LOG_IN } from "./store/auth/authSlice";
 import "./style/login.css";
 
@@ -8,6 +8,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
+  const user = useSelector((state) => state.user.loggedIn);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -32,7 +33,7 @@ export default function Login() {
       }
       if (response.ok && data) {
         dispatch(LOG_IN(data));
-        navigate("/");
+        navigate(-1, { replace: true });
       }
     } catch (error) {
       setError(error.message);

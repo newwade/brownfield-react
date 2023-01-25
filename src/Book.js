@@ -1,15 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import PassengerForm from "./component/PassengerForm";
-import { ADD_PASSENGER } from "./store/flight/flightSlice";
+import { ADD_PASSENGER, SELECT } from "./store/flight/flightSlice";
 
 function Book() {
-  const { data: flight, count } = useSelector((state) => state.flight);
+  const { count } = useSelector((state) => state.flight);
+  const user = useSelector((state) => state.user.loggedIn);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {}, []);
+  const [flight, setFlight] = useState();
+  useEffect(() => {
+    if (!user) {
+      return navigate("/login");
+    }
+  });
 
   const getPassengers = async () => {
     try {
@@ -24,6 +30,7 @@ function Book() {
         }
         requestData.push(Object.fromEntries(formData));
       });
+      dispatch(SELECT(flight));
       const res = dispatch(ADD_PASSENGER(requestData));
       if (res) {
         navigate("/payment");
@@ -31,8 +38,30 @@ function Book() {
       }
     } catch (error) {
       console.log(error.message);
+      alert(error.message);
     }
   };
+
+  const getFlight = async () => {
+    try {
+      const response = await fetch(`http://localhost:8081/api/v1/flight/${id}`);
+      const data = await response.json();
+      console.log(data);
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      if (response.ok) {
+        setFlight(data);
+      }
+    } catch (error) {
+      console.log(error.message);
+      navigate("*", { replace: true });
+    }
+  };
+
+  useEffect(() => {
+    getFlight();
+  }, []);
 
   return (
     <div className="container">
@@ -49,19 +78,19 @@ function Book() {
             <div className="travel_desc d-flex justify-content-between">
               <div>
                 <h5>
-                  <span>{flight.origin}</span>
+                  <span>{flight?.origin}</span>
                   {"->"}
-                  <span>{flight.destination}</span>
+                  <span>{flight?.destination}</span>
                 </h5>
               </div>
               <div className="travel_date">
-                <span>{flight.flightDate}</span>{" "}
-                <span>{flight.departureTime}</span>
+                <span>{flight?.flightDate}</span>{" "}
+                <span>{flight?.departureTime}</span>
               </div>
             </div>
             <div className="trave_flight d-flex justify-content-between">
               <p>Flight </p>
-              <span>{flight.flightInfo.flightNumber}</span>
+              <span>{flight?.flightInfo.flightNumber}</span>
             </div>
             <div className="fare_desc">
               <div className="d-flex justify-content-between">
@@ -70,12 +99,12 @@ function Book() {
               </div>
               <div className="d-flex justify-content-between">
                 <p>Fare</p>
-                <p>{flight.fare.fare}</p>
+                <p>{flight?.fare.fare}</p>
               </div>
             </div>
             <div className="d-flex justify-content-between">
               <h5>Payable Amount</h5>
-              <p>${flight.fare.fare * count}</p>
+              <p>${flight?.fare.fare * count}</p>
             </div>
             <button
               onClick={getPassengers}

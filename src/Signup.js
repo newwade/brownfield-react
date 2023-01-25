@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import "./style/signup.css";
 
 export default function Signup() {
+  const user = useSelector((state) => state.user.loggedIn);
   const [error, setError] = useState();
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (user) {
+  //     return navigate("/");
+  //   }
+  // }, []);
+
   const handleUserRegistration = async (e) => {
     e.preventDefault();
     try {

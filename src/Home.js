@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { COUNT, SELECT } from "./store/flight/flightSlice";
+import { SELECT, SET_COUNT } from "./store/flight/flightSlice";
 import "./style/home.css";
 
 export default function Home() {
@@ -46,9 +46,10 @@ export default function Home() {
   };
 
   const handleRedirectBooking = (flight) => {
-    dispatch(COUNT(count));
-    dispatch(SELECT(flight));
-    navigate(`/travel/${flight.id}`);
+    const res = dispatch(SET_COUNT(count));
+    if (res) {
+      navigate(`/flight/${flight.id}`);
+    }
   };
   return (
     <div className="App">

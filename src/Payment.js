@@ -38,7 +38,9 @@ function Payment() {
       }
       if (response.status === 201 && data) {
         console.log(data);
-        navigate("/payment/success");
+        navigate(`/payment/success/${data.payment.paymentId}`, {
+          replace: true,
+        });
       }
     } catch (error) {
       alert(error.message);
