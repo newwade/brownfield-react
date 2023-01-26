@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import PassengerForm from "./component/PassengerForm";
-import { ADD_PASSENGER, SELECT } from "./store/flight/flightSlice";
+import { SELECT_FLIGHT, ADD_PASSENGER } from "./store/flight/flightSlice";
 import { ToastContainer, toast, Slide } from "react-toastify";
 
 function Book() {
@@ -35,7 +35,7 @@ function Book() {
         }
         requestData.push(Object.fromEntries(formData));
       });
-      dispatch(SELECT(flight));
+      dispatch(SELECT_FLIGHT(flight));
       const res = dispatch(ADD_PASSENGER(requestData));
       if (res) {
         navigate("/payment");

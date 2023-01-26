@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import "./style/success.css";
 
-function Success() {
+function SuccessBooking() {
   const { id } = useParams();
 
   return (
@@ -41,4 +41,4 @@ function Success() {
   );
 }
 
-export default Success;
+export default SuccessBooking;

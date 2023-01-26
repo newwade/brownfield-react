@@ -1,11 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Slide } from "react-toastify";
+import {
+  REMOVE_FLIGHT,
+  REMOVE_PASSENGER,
+  RESET_COUNT,
+} from "./store/flight/flightSlice";
 import "./style/payment.css";
 
 function Payment() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.data);
   const { data: flight, passengers } = useSelector((state) => state.flight);
 
@@ -39,6 +45,9 @@ function Payment() {
       }
       if (response.status === 201 && data) {
         console.log(data);
+        dispatch(RESET_COUNT());
+        dispatch(REMOVE_FLIGHT());
+        dispatch(REMOVE_PASSENGER());
         navigate(`/payment/success/${data.payment.paymentId}`, {
           replace: true,
         });

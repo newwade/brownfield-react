@@ -1,12 +1,13 @@
 import { Route, Routes } from "react-router-dom";
 import Book from "./Book";
+import Checkin from "./Checkin";
 import Navbar from "./component/Navbar";
 import Home from "./Home";
 import Login from "./Login";
 import PageNotFound from "./PageNotFound";
 import Payment from "./Payment";
 import Signup from "./Signup";
-import Success from "./Success";
+import SuccessBooking from "./SuccessBooking";
 import UserBooking from "./UserBooking";
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
         <Route path="/booking" element={<UserBooking />} />
         <Route path="/flight/:id" element={<Book />} />
         <Route path="/payment" element={<Payment />} />
-        <Route path="/payment/success/:id" element={<Success />} />
+        <Route path="/payment/success/:id" element={<SuccessBooking />} />
+        <Route path="/checkin" element={<Checkin />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>

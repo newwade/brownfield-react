@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Slide } from "react-toastify";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 function UserBooking() {
   const { data: user, loggedIn } = useSelector((state) => state.user);
@@ -34,7 +36,6 @@ function UserBooking() {
 
   const handleCancelBooking = async (bookingId) => {
     try {
-      setLoading(true);
       const settings = {
         method: "DELETE",
       };
@@ -54,9 +55,24 @@ function UserBooking() {
       toast.warning(error.message, {
         transition: Slide,
       });
-    } finally {
-      setLoading(false);
     }
+  };
+
+  const cancelReservation = (bookingId) => {
+    confirmAlert({
+      message: "Are you sure you want to cancel reservation?",
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => handleCancelBooking(bookingId),
+        },
+        {
+          label: "No",
+        },
+      ],
+      closeOnEscape: true,
+      closeOnClickOutside: true,
+    });
   };
 
   useEffect(() => {
@@ -81,7 +97,7 @@ function UserBooking() {
         bookingData.map((booking, i) => (
           <div key={booking.bookingId} className="card mt-3 border">
             <div className="card-body">
-              <div className="d-flex justify-content-between">
+              <div className="d-flex justify-content-between ">
                 <h5 className="card-title">
                   {booking.origin} <span>{" -> "}</span>
                   {booking.destination}
@@ -91,27 +107,27 @@ function UserBooking() {
                   {booking.arrivalTime}
                 </h5>
               </div>
-              <div className="d-flex justify-content-between">
-                <div className="d-flex">
-                  <p className="card-text">Date: </p>
+              <div className="d-flex justify-content-between ">
+                <div className="d-flex gap-2">
+                  <p className="card-text">Date:</p>
                   <p className="card-text">{booking.flightDate}</p>
                 </div>
                 <div>
                   <p className="card-text">{booking?.flightNumber}</p>
                 </div>
               </div>
-              <div className="d-flex">
-                <p className="card-text">PNR: </p>
+              <div className="d-flex gap-2">
+                <p className="card-text">PNR:</p>
                 <p className="card-text">{booking.pnrNumber}</p>
               </div>
               {booking.passengers.map((passenger, i) => {
                 return (
                   <div
                     key={passenger.passengerId}
-                    className="d-flex justify-content-between text-muted"
+                    className="d-flex justify-content-between  "
                   >
-                    <div className="d-flex">
-                      <p className="card-text">Passenger : </p>
+                    <div className="d-flex gap-2">
+                      <p className="card-text">Passenger:</p>
                       <p className="card-text">
                         {passenger.firstName + " " + passenger.lastName}
                       </p>
@@ -121,16 +137,19 @@ function UserBooking() {
                   </div>
                 );
               })}
-
-              <p className="card-text">
-                <small className="text-muted">{booking.bookingDate}</small>
-              </p>
-              <button
-                onClick={() => handleCancelBooking(booking.bookingId)}
-                className={`btn btn-primary ${loading && "disabled"}`}
-              >
-                Cancel Reservation
-              </button>
+              <div className="d-flex justify-content-between align-items-center">
+                <p className="card-text">
+                  <small className="text-muted">{booking.bookingDate}</small>
+                </p>
+                <button
+                  onClick={() => {
+                    cancelReservation(booking.bookingId);
+                  }}
+                  className={`btn btn-primary ${loading && "disabled"}`}
+                >
+                  Cancel Reservation
+                </button>
+              </div>
             </div>
           </div>
         ))

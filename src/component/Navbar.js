@@ -44,7 +44,9 @@ function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link text-light">Checkin</a>
+              <Link to="/checkin" className="nav-link text-light">
+                Checkin
+              </Link>
             </li>
           </ul>
           <div className="d-flex justify-content-between align-items-center gap-2">

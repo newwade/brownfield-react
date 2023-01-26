@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { SELECT, SET_COUNT } from "./store/flight/flightSlice";
-import { ToastContainer, toast, Slide } from "react-toastify";
+import { SET_COUNT } from "./store/flight/flightSlice";
+import { ToastContainer, toast, Slide, Flip } from "react-toastify";
 import "./style/home.css";
 import "react-toastify/dist/ReactToastify.css";
 

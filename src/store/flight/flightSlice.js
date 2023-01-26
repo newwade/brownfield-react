@@ -8,10 +8,10 @@ export const flightSlice = createSlice({
     passengers: [],
   },
   reducers: {
-    SELECT: (state, action) => {
+    SELECT_FLIGHT: (state, action) => {
       state.data = action.payload;
     },
-    REMOVE: (state) => {
+    REMOVE_FLIGHT: (state) => {
       state.data = null;
     },
     ADD_PASSENGER: (state, action) => {
@@ -23,7 +23,7 @@ export const flightSlice = createSlice({
     SET_COUNT: (state, action) => {
       state.count = action.payload;
     },
-    RESET_COUNT: (state, action) => {
+    RESET_COUNT: (state) => {
       state.count = 1;
     },
   },
@@ -31,8 +31,8 @@ export const flightSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  SELECT,
-  REMOVE,
+  SELECT_FLIGHT,
+  REMOVE_FLIGHT,
   ADD_PASSENGER,
   REMOVE_PASSENGER,
   SET_COUNT,
