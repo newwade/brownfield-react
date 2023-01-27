@@ -8,6 +8,7 @@ import PageNotFound from "./PageNotFound";
 import Payment from "./Payment";
 import Signup from "./Signup";
 import SuccessBooking from "./SuccessBooking";
+import SuccessCheckin from "./SuccessCheckin";
 import UserBooking from "./UserBooking";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment/success/:id" element={<SuccessBooking />} />
         <Route path="/checkin" element={<Checkin />} />
+        <Route path="/checkin/success/:id" element={<SuccessCheckin />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>

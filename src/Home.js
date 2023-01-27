@@ -130,8 +130,11 @@ export default function Home() {
               </button>
             </form>
           </div>
-          <div className="col-md-8 column" style={{ marginTop: "5%" }}>
-            <table className="table">
+          <div
+            className="col-md-8 column overflow-auto"
+            style={{ marginTop: "5%" }}
+          >
+            <table className="table ">
               <thead>
                 <tr>
                   <th>Name</th>

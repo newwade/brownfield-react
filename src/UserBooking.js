@@ -86,7 +86,7 @@ function UserBooking() {
   });
 
   return (
-    <div className="container ">
+    <div className="container">
       <ToastContainer
         position="top-center"
         autoClose={500}
@@ -95,7 +95,10 @@ function UserBooking() {
       />
       {bookingData.length > 0 ? (
         bookingData.map((booking, i) => (
-          <div key={booking.bookingId} className="card mt-3 border">
+          <div
+            key={booking.bookingId}
+            className="card mt-3 border overflow-auto"
+          >
             <div className="card-body">
               <div className="d-flex justify-content-between ">
                 <h5 className="card-title">

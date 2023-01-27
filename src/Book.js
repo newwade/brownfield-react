@@ -64,7 +64,7 @@ function Book() {
         setFlight(data);
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       setError(error.message);
       navigate("*", { replace: true });
     }
@@ -81,14 +81,14 @@ function Book() {
         hideProgressBar={true}
         newestOnTop={true}
       />
-      <div className="row">
-        <div className="col-8 d-flex flex-column ">
+      <div className="row ">
+        <div className="col-md-8  d-flex flex-column ">
           <h5>Passenger Details</h5>
           {[...Array(+count)].map((x, i) => (
             <PassengerForm key={i} p_no={i} />
           ))}
         </div>
-        <div className=" trip_summary col-4 ">
+        <div className=" trip_summary col-md-4 ">
           <h5>Trip Summary</h5>
           <div className="bg-light p-2 rounded border">
             <div className="travel_desc d-flex justify-content-between">

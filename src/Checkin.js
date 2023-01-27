@@ -1,10 +1,17 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { Slide, toast, ToastContainer } from "react-toastify";
 
 function Checkin() {
   const [booking, setBooking] = useState();
   const [loading, setLoading] = useState(false);
+  const [passenger, setPassenger] = useState();
   const [confirm, setConfirm] = useState(false);
   const [error, setError] = useState("");
+  const closeRef = useRef();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const fetchBooking = async (e) => {
     e.preventDefault();
@@ -14,6 +21,7 @@ function Checkin() {
         `http://localhost:8081/api/v1/book/pnr/${pnr}`
       );
       const data = await response.json();
+      console.log(data);
       if (!response.ok) {
         throw new Error(data.message);
       }
@@ -22,16 +30,60 @@ function Checkin() {
       }
     } catch (error) {
       console.log(error);
+      toast.warning(error.message, {
+        transition: Slide,
+      });
       setError(error.message);
     }
   };
 
-  const handleCheckin = () => {
-    console.log(booking);
+  const handleCheckin = async () => {
+    try {
+      console.log(passenger);
+      const requestData = {
+        baggage_checking_status: true,
+        security_checking_status: true,
+        immigration_status: true,
+        passenger: {
+          passengerId: passenger.passengerId,
+        },
+      };
+      const settings = {
+        method: "POST",
+        body: JSON.stringify(requestData),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      };
+      const response = await fetch(
+        `http://localhost:8081/api/v1/checkin/save`,
+        settings
+      );
+      const data = await response.json();
+      if (response.status !== 201) {
+        throw new Error(data);
+      }
+      if (response.status === 201 && data) {
+        closeRef.current.click();
+        navigate(`/checkin/success/${data.checkinId}`);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.warning(error.message, {
+        transition: Slide,
+      });
+      setError(error.message);
+    }
   };
-
   return (
     <div className="container">
+      <ToastContainer
+        position="top-center"
+        autoClose={900}
+        hideProgressBar={true}
+        newestOnTop={true}
+      />
       <form
         className="d-flex justify-content-center mt-5"
         onSubmit={fetchBooking}
@@ -83,7 +135,7 @@ function Checkin() {
               return (
                 <div
                   key={passenger.passengerId}
-                  className="d-flex justify-content-between  "
+                  className="d-flex justify-content-between align-items-center mt-2 "
                 >
                   <div className="d-flex gap-2">
                     <p className="card-text">Passenger:</p>
@@ -93,6 +145,17 @@ function Checkin() {
                   </div>
                   <p className="card-text">{passenger.emailAddress}</p>
                   <p className="card-text">{passenger.mobileNumber}</p>
+                  <button
+                    type="button"
+                    className={`btn btn-primary ${loading && "disabled"} ${
+                      passenger.checked_in && "disabled"
+                    } `}
+                    data-bs-toggle="modal"
+                    data-bs-target="#staticBackdrop"
+                    onClick={() => setPassenger(passenger)}
+                  >
+                    Check-in
+                  </button>
                 </div>
               );
             })}
@@ -100,18 +163,11 @@ function Checkin() {
               <p className="card-text">
                 <small className="text-muted">{booking.bookingDate}</small>
               </p>
-              <button
-                type="button"
-                className={`btn btn-primary ${loading && "disabled"} `}
-                data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop"
-              >
-                Continue Check-in
-              </button>
             </div>
           </div>
         </div>
       )}
+
       <div
         class="modal fade"
         id="staticBackdrop"
@@ -178,6 +234,7 @@ function Checkin() {
                 type="button"
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
+                ref={closeRef}
               >
                 Cancel
               </button>
