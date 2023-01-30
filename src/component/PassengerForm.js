@@ -114,12 +114,14 @@ function PassengerForm(props) {
                 <span className="input-group-text">#</span>
               </div>
               <input
-                type="text"
-                className="form-control "
+                type="number"
+                className="form-control"
                 id="mobileNumber"
                 name="mobileNumber"
                 placeholder="+91"
                 aria-describedby="inputGroupPrepend3"
+                min={10}
+                max={10}
                 required
               />
             </div>
@@ -141,7 +143,7 @@ function PassengerForm(props) {
           <div className="col-md-6 mb-3">
             <label for="emailAddress">Email</label>
             <input
-              type="text"
+              type="email"
               className="form-control "
               id="emailAddress"
               name="emailAddress"

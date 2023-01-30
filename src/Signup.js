@@ -7,6 +7,7 @@ export default function Signup() {
   const user = useSelector((state) => state.user.loggedIn);
   const [error, setError] = useState();
   const navigate = useNavigate();
+  const base_url = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     if (user) {
@@ -33,7 +34,7 @@ export default function Signup() {
         },
       };
       const response = await fetch(
-        "http://localhost:8081/api/v1/user/register",
+        `${base_url}/api/v1/user/register`,
         settings
       );
       const data = await response.json();
@@ -50,7 +51,7 @@ export default function Signup() {
   };
   return (
     <div>
-      <section style={{ backgroundColor: "#00ffff" }}>
+      <section>
         <div className="mask d-flex align-items-center h-100 gradient-custom-3">
           <div className="container h-100">
             <div className="row d-flex justify-content-center align-items-center h-100">
@@ -142,26 +143,6 @@ export default function Signup() {
                         />
                         <label className="form-label" for="password_repeat">
                           Repeat your password
-                        </label>
-                      </div>
-
-                      <div className="form-check d-flex justify-content-center mb-5">
-                        <input
-                          className="form-check-input me-2"
-                          type="checkbox"
-                          value=""
-                          id="checkbox_terms"
-                          name="checkbox_terms"
-                          required
-                        />
-                        <label
-                          className="form-check-label"
-                          for="checkbox_terms"
-                        >
-                          I agree all statements in
-                          <a href="#!" className="text-body">
-                            <u>Terms of service</u>
-                          </a>
                         </label>
                       </div>
 

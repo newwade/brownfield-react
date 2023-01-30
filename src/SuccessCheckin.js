@@ -7,14 +7,12 @@ function SuccessCheckin() {
   const [error, setError] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
+  const base_url = process.env.REACT_APP_BASE_URL;
 
   const handleFetchCheckin = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:8081/api/v1/checkin/${id}`
-      );
+      const response = await fetch(`${base_url}/api/v1/checkin/${id}`);
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         throw new Error(data.message);
       }

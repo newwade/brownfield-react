@@ -12,14 +12,13 @@ function Checkin() {
   const closeRef = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const base_url = process.env.REACT_APP_BASE_URL;
 
   const fetchBooking = async (e) => {
     e.preventDefault();
     try {
       const pnr = e.target.pnr.value;
-      const response = await fetch(
-        `http://localhost:8081/api/v1/book/pnr/${pnr}`
-      );
+      const response = await fetch(`${base_url}/api/v1/book/pnr/${pnr}`);
       const data = await response.json();
       console.log(data);
       if (!response.ok) {
@@ -39,7 +38,6 @@ function Checkin() {
 
   const handleCheckin = async () => {
     try {
-      console.log(passenger);
       const requestData = {
         baggage_checking_status: true,
         security_checking_status: true,
@@ -56,10 +54,7 @@ function Checkin() {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch(
-        `http://localhost:8081/api/v1/checkin/save`,
-        settings
-      );
+      const response = await fetch(`${base_url}/api/v1/checkin/save`, settings);
       const data = await response.json();
       if (response.status !== 201) {
         throw new Error(data);

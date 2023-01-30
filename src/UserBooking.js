@@ -10,15 +10,13 @@ function UserBooking() {
   const [bookingData, setBookingData] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const base_url = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
 
   const fetchUserBookingData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `http://localhost:8081/api/v1/book/user/${user.id}`
-      );
+      const response = await fetch(`${base_url}/api/v1/book/user/${user.id}`);
       let data = await response.json();
       if (!response.ok) {
         throw new Error(data.message);
@@ -40,7 +38,7 @@ function UserBooking() {
         method: "DELETE",
       };
       const response = await fetch(
-        `http://localhost:8081/api/v1/book/cancel/${bookingId}`,
+        `${base_url}/api/v1/book/cancel/${bookingId}`,
         settings
       );
       if (!response.ok) {

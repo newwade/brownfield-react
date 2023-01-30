@@ -14,6 +14,7 @@ function Payment() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.data);
   const { data: flight, passengers } = useSelector((state) => state.flight);
+  const base_url = process.env.REACT_APP_BASE_URL;
 
   const handleBooking = async (e) => {
     e.preventDefault();
@@ -35,10 +36,7 @@ function Payment() {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch(
-        "http://localhost:8081/api/v1/book/save",
-        settings
-      );
+      const response = await fetch(`${base_url}/api/v1/book/save`, settings);
       const data = await response.json();
       if (response.status !== 201) {
         throw new Error(data.message);
@@ -81,9 +79,7 @@ function Payment() {
                     name="cardNumber"
                     className="card__input cardNumber"
                     placeholder="1234 5678 9012 3457"
-                    size="17"
-                    minLength="16"
-                    maxLength="16"
+                    pattern="[0-9]{16}"
                     required
                   />
                   <img
@@ -112,13 +108,10 @@ function Payment() {
                       <p className="text-warning mb-0">Expiration</p>
                       <input
                         className="card__input"
-                        type="text"
+                        type="month"
                         name="exp"
                         placeholder="MM/YYYY"
-                        size="7"
                         id="exp"
-                        minLength="7"
-                        maxLength="7"
                         required
                       />
                     </div>
@@ -130,9 +123,9 @@ function Payment() {
                         className="card__input cvc"
                         type="password"
                         placeholder="&#9679;&#9679;&#9679;"
-                        size="1"
                         minLength="3"
                         maxLength="3"
+                        pattern="[0-9]{3}"
                         required
                       />
                     </div>

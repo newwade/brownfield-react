@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import PassengerForm from "./component/PassengerForm";
+import { REGEX_EMAIL, REGEX_PHONE } from "./constant/constant";
 import { SELECT_FLIGHT, ADD_PASSENGER } from "./store/flight/flightSlice";
 import { ToastContainer, toast, Slide } from "react-toastify";
 
@@ -14,6 +15,7 @@ function Book() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [flight, setFlight] = useState();
+  const base_url = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     if (!user) {
@@ -33,6 +35,14 @@ function Book() {
             throw new Error("Please fill all passenger details");
           }
         }
+        const mobile = formData.get("mobileNumber");
+        const email = formData.get("emailAddress");
+        if (!REGEX_EMAIL.test(email)) {
+          throw new Error("invalid email");
+        }
+        if (!REGEX_PHONE.test(mobile)) {
+          throw new Error("invalid phone");
+        }
         requestData.push(Object.fromEntries(formData));
       });
       dispatch(SELECT_FLIGHT(flight));
@@ -42,7 +52,7 @@ function Book() {
         return;
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       setError(error.message);
       toast.warning(error.message, {
         transition: Slide,
@@ -54,7 +64,7 @@ function Book() {
 
   const getFlight = async () => {
     try {
-      const response = await fetch(`http://localhost:8081/api/v1/flight/${id}`);
+      const response = await fetch(`${base_url}/api/v1/flight/${id}`);
       const data = await response.json();
       console.log(data);
       if (!response.ok) {

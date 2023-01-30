@@ -9,7 +9,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const user = useSelector((state) => state.user.loggedIn);
-
+  const base_url = process.env.REACT_APP_BASE_URL;
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -23,10 +23,7 @@ export default function Login() {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch(
-        "http://localhost:8081/api/v1/user/login",
-        settings
-      );
+      const response = await fetch(`${base_url}/api/v1/user/login`, settings);
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message);

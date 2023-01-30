@@ -12,6 +12,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const base_url = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {}, []);
 
@@ -29,10 +30,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch(
-        "http://localhost:8081/api/v1/flight/find",
-        settings
-      );
+      const response = await fetch(`${base_url}/api/v1/flight/find`, settings);
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.message);
