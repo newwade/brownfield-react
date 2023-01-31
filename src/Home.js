@@ -10,6 +10,18 @@ export default function Home() {
   const [flights, setFlights] = useState([]);
   const [count, setCount] = useState(1);
   const [error, setError] = useState("");
+  const [states, setState] = useState([
+    "chennai",
+    "delhi",
+    "mumbai",
+    "bangalore",
+    "Kolkata",
+    "kerala",
+    "pune",
+  ]);
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const base_url = process.env.REACT_APP_BASE_URL;
@@ -37,7 +49,6 @@ export default function Home() {
       }
       if (response.ok && data) {
         setFlights(data);
-        console.log(data);
       }
     } catch (error) {
       setError(error.message);
@@ -72,30 +83,40 @@ export default function Home() {
                   From
                 </label>
                 <input
-                  type="text"
-                  id="origin"
+                  list="origins"
                   name="origin"
+                  id="origin"
+                  value={origin}
+                  onChange={(e) => setOrigin(e.target.value)}
                   className="form-control form-control-lg"
                   required
+                  autoComplete="off"
                 />
-                {/* <select className="form-control" id="from">
-                  <option></option>
-                  <option value="BOM">Mumbai - BOM</option>
-                  <option value="DEL">Delhi - DEL</option>
-                  <option value="BLR">Bangalore - BLR</option>
-                  <option value="PUN">Pune - PUN</option>
-                  <option value="KOL">Kolkatta - KOL</option>
-                </select> */}
+                <datalist id="origins">
+                  {states.map((state) => {
+                    return <option value={state} />;
+                  })}
+                </datalist>
               </div>
               <div className="form-group mb-2">
                 <label for="destination">To</label>
                 <input
-                  type="text"
+                  list="destinations"
                   id="destination"
                   name="destination"
+                  value={destination}
+                  onChange={(e) => setDestination(e.target.value)}
                   className="form-control form-control-lg"
                   required
+                  autoComplete="off"
                 />
+                <datalist id="destinations">
+                  {states
+                    .filter((state) => state !== origin)
+                    .map((state) => {
+                      return <option value={state} />;
+                    })}
+                </datalist>
               </div>
               <div className="form-group mb-2">
                 <label for="date">On</label>
@@ -135,7 +156,7 @@ export default function Home() {
             <table className="table ">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Airline</th>
                   <th>Number</th>
                   <th>Date</th>
                   <th>Dep.</th>

@@ -45,6 +45,30 @@ function Book() {
         }
         requestData.push(Object.fromEntries(formData));
       });
+
+      const isRedundant = requestData.every((val, i, arr) => {
+        return (
+          JSON.stringify(
+            (({ firstName, lastName, gender }) => ({
+              firstName,
+              lastName,
+              gender,
+            }))(val)
+          ) ===
+          JSON.stringify(
+            (({ firstName, lastName, gender }) => ({
+              firstName,
+              lastName,
+              gender,
+            }))(arr[0])
+          )
+        );
+      });
+      if (isRedundant) {
+        throw new Error(
+          "Passengers with same firstname, lastname found. Please check the passenger details."
+        );
+      }
       dispatch(SELECT_FLIGHT(flight));
       const res = dispatch(ADD_PASSENGER(requestData));
       if (res) {
@@ -66,7 +90,6 @@ function Book() {
     try {
       const response = await fetch(`${base_url}/api/v1/flight/${id}`);
       const data = await response.json();
-      console.log(data);
       if (!response.ok) {
         throw new Error(data.message);
       }
@@ -87,18 +110,18 @@ function Book() {
     <div className="container">
       <ToastContainer
         position="top-center"
-        autoClose={500}
+        autoClose={1000}
         hideProgressBar={true}
         newestOnTop={true}
       />
       <div className="row ">
-        <div className="col-md-8  d-flex flex-column ">
+        <div className="col-md-8  d-flex flex-column mt-3">
           <h5>Passenger Details</h5>
           {[...Array(+count)].map((x, i) => (
             <PassengerForm key={i} p_no={i} />
           ))}
         </div>
-        <div className=" trip_summary col-md-4 ">
+        <div className=" trip_summary col-md-4 mt-3">
           <h5>Trip Summary</h5>
           <div className="bg-light p-2 rounded border">
             <div className="travel_desc d-flex justify-content-between">
@@ -121,11 +144,11 @@ function Book() {
             <div className="fare_desc">
               <div className="d-flex justify-content-between">
                 <p>Passengers</p>
-                <p>{count}</p>
+                <p>x{count}</p>
               </div>
               <div className="d-flex justify-content-between">
                 <p>Fare</p>
-                <p>{flight?.fare.fare}</p>
+                <p>${flight?.fare.fare}</p>
               </div>
             </div>
             <div className="d-flex justify-content-between">

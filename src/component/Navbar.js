@@ -6,9 +6,6 @@ import { Link } from "react-router-dom";
 function Navbar() {
   const user = useSelector((state) => state.user.data);
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log(user);
-  }, []);
 
   const handleClick = () => {
     dispatch(LOG_OUT());
@@ -39,7 +36,7 @@ function Navbar() {
             </li>
             <li className="nav-item">
               <Link to="/booking" className="nav-link text-light">
-                Flights
+                Bookings
               </Link>
             </li>
             <li className="nav-item">

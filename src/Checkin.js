@@ -143,7 +143,7 @@ function Checkin() {
                   <button
                     type="button"
                     className={`btn btn-primary ${loading && "disabled"} ${
-                      passenger.checked_in && "disabled"
+                      passenger.checked_in && "disabled btn-secondary"
                     } `}
                     data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop"

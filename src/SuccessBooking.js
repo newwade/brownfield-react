@@ -1,9 +1,18 @@
-import React from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./style/success.css";
 
 function SuccessBooking() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.data);
+
+  useEffect(() => {
+    if (!user) {
+      return navigate("/login");
+    }
+  });
 
   return (
     <div className="container booking_confirm">

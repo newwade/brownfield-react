@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Slide } from "react-toastify";
@@ -15,6 +15,14 @@ function Payment() {
   const user = useSelector((state) => state.user.data);
   const { data: flight, passengers } = useSelector((state) => state.flight);
   const base_url = process.env.REACT_APP_BASE_URL;
+  const [cvv, setCvv] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+
+  useEffect(() => {
+    if (!user) {
+      return navigate("/login");
+    }
+  });
 
   const handleBooking = async (e) => {
     e.preventDefault();
@@ -79,7 +87,18 @@ function Payment() {
                     name="cardNumber"
                     className="card__input cardNumber"
                     placeholder="1234 5678 9012 3457"
+                    value={cardNumber}
+                    onChange={(e) => {
+                      if (!isNaN(e.target.value)) {
+                        setCardNumber(e.target.value);
+                      } else {
+                        setCardNumber((card_number) => {
+                          return card_number;
+                        });
+                      }
+                    }}
                     pattern="[0-9]{16}"
+                    title="please provide valid card number"
                     required
                   />
                   <img
@@ -89,7 +108,6 @@ function Payment() {
                     height="60px"
                   />
                 </div>
-
                 <div className="form-group">
                   <p className="text-warning mb-0">Cardholder's Name</p>
                   <input
@@ -98,7 +116,8 @@ function Payment() {
                     className="card__input cardholderName"
                     type="text"
                     placeholder="Name"
-                    size="17"
+                    pattern="^[A-Za-z]+$"
+                    title="invalid name"
                     required
                   />
                 </div>
@@ -111,6 +130,13 @@ function Payment() {
                         type="month"
                         name="exp"
                         placeholder="MM/YYYY"
+                        min={
+                          new Date().getFullYear() +
+                          "-" +
+                          (new Date().getMonth() + 1 < 10
+                            ? "0" + (new Date().getMonth() + 1)
+                            : new Date().getMonth() + 1)
+                        }
                         id="exp"
                         required
                       />
@@ -123,9 +149,18 @@ function Payment() {
                         className="card__input cvc"
                         type="password"
                         placeholder="&#9679;&#9679;&#9679;"
-                        minLength="3"
-                        maxLength="3"
+                        value={cvv}
+                        onChange={(e) => {
+                          if (!isNaN(e.target.value)) {
+                            setCvv(e.target.value);
+                          } else {
+                            setCvv((cvv) => {
+                              return cvv;
+                            });
+                          }
+                        }}
                         pattern="[0-9]{3}"
+                        title="please provide valid cvv"
                         required
                       />
                     </div>
