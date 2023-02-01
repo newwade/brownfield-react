@@ -8,6 +8,7 @@ function Checkin() {
   const [loading, setLoading] = useState(false);
   const [passenger, setPassenger] = useState();
   const [confirm, setConfirm] = useState(false);
+  const [checkInDisabled, SetCheckInDisabled] = useState(false);
   const [error, setError] = useState("");
   const closeRef = useRef();
   const navigate = useNavigate();
@@ -20,11 +21,20 @@ function Checkin() {
       const pnr = e.target.pnr.value;
       const response = await fetch(`${base_url}/api/v1/book/pnr/${pnr}`);
       const data = await response.json();
-      console.log(data);
+
       if (!response.ok) {
         throw new Error(data.message);
       }
       if (response.ok) {
+        const departure_date_time = new Date(
+          `${data.flightDate}T${data.departureTime}`
+        );
+        const date_now = new Date();
+        const hours = (departure_date_time - date_now) / 3600000;
+        if (date_now > departure_date_time || hours > 24 || hours < 1) {
+          SetCheckInDisabled(true);
+        }
+        console.log(hours);
         setBooking(data);
       }
     } catch (error) {
@@ -90,9 +100,10 @@ function Checkin() {
           <input
             type="text"
             id="pnr"
-            className="form-control-sm"
+            className="form-control-sm border"
             placeholder="Enter Your PNR Number"
             required
+            autoComplete="off"
           />
           <button type="submit" className="btn btn-primary">
             Search Booking
@@ -142,8 +153,10 @@ function Checkin() {
                   <p className="card-text">{passenger.mobileNumber}</p>
                   <button
                     type="button"
-                    className={`btn btn-primary ${loading && "disabled"} ${
-                      passenger.checked_in && "disabled btn-secondary"
+                    className={`btn ${loading && "disabled"} ${
+                      passenger.checked_in || checkInDisabled
+                        ? "disabled btn-secondary"
+                        : "btn-primary"
                     } `}
                     data-bs-toggle="modal"
                     data-bs-target="#staticBackdrop"
@@ -164,7 +177,7 @@ function Checkin() {
       )}
 
       <div
-        class="modal fade"
+        className="modal fade"
         id="staticBackdrop"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -172,20 +185,23 @@ function Checkin() {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-dialog-scrollable ">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title fs-5 text-center" id="staticBackdropLabel">
+        <div className="modal-dialog modal-dialog-scrollable ">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4
+                className="modal-title fs-5 text-center"
+                id="staticBackdropLabel"
+              >
                 Terms and Conditions
               </h4>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body text-secondary " id="conditions">
+            <div className="modal-body text-secondary " id="conditions">
               <p className="">
                 Checked baggage allowance is applicable only on Air India
                 operated flights and not on Brown Field Airline Express or any
@@ -218,16 +234,16 @@ function Checkin() {
                     setConfirm(!confirm);
                   }}
                 />
-                <label for="checkbox">
+                <label htmlFor="checkbox">
                   I agree to these
                   <a href="#conditions">Terms and Conditions</a>.
                 </label>
               </div>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
                 ref={closeRef}
               >

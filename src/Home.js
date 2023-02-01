@@ -21,7 +21,6 @@ export default function Home() {
   ]);
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const base_url = process.env.REACT_APP_BASE_URL;
@@ -70,7 +69,7 @@ export default function Home() {
     <div className="App">
       <ToastContainer
         position="top-center"
-        autoClose={500}
+        autoClose={1500}
         hideProgressBar={true}
         newestOnTop={true}
       />
@@ -79,47 +78,64 @@ export default function Home() {
           <div className="col-md-4 column d-flex flex-column justify-content-center align-items-center">
             <form onSubmit={handleFlightSearch}>
               <div className="form-group mb-2">
-                <label for="origin" className="text-center">
+                <label htmlFor="origin" className="text-center">
                   From
                 </label>
-                <input
-                  list="origins"
+                <select
+                  className="form-control  form-control-lg"
                   name="origin"
                   id="origin"
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value)}
-                  className="form-control form-control-lg"
                   required
-                  autoComplete="off"
-                />
-                <datalist id="origins">
-                  {states.map((state) => {
-                    return <option value={state} />;
-                  })}
-                </datalist>
+                >
+                  <option value="">--</option>
+                  {states
+                    .filter((state) => state !== destination)
+                    .map((state, i) => {
+                      return (
+                        <option key={i} value={state}>
+                          {state}
+                        </option>
+                      );
+                    })}
+                </select>
+              </div>
+              <div
+                role="button"
+                className="text-center "
+                onClick={() => {
+                  let temp = origin;
+                  setOrigin(destination);
+                  setDestination(temp);
+                }}
+              >
+                <i className="bi bi-arrow-down-up fw-bolder fs-5"></i>
               </div>
               <div className="form-group mb-2">
-                <label for="destination">To</label>
-                <input
-                  list="destinations"
+                <label htmlFor="destination">To</label>
+                <select
+                  className="form-control form-control-lg"
                   id="destination"
                   name="destination"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  className="form-control form-control-lg"
                   required
-                  autoComplete="off"
-                />
-                <datalist id="destinations">
+                >
+                  <option value="">--</option>
                   {states
                     .filter((state) => state !== origin)
-                    .map((state) => {
-                      return <option value={state} />;
+                    .map((state, i) => {
+                      return (
+                        <option key={i} value={state}>
+                          {state}
+                        </option>
+                      );
                     })}
-                </datalist>
+                </select>
               </div>
               <div className="form-group mb-2">
-                <label for="date">On</label>
+                <label htmlFor="date">On</label>
                 <input
                   type="date"
                   className="form-control"
@@ -129,7 +145,7 @@ export default function Home() {
                 />
               </div>
               <div className="form-group mb-2">
-                <label for="passengers">Passengers</label>
+                <label htmlFor="passengers">Passengers</label>
                 <input
                   type="number"
                   className="form-control"
@@ -145,7 +161,7 @@ export default function Home() {
                 id="search-flights"
                 className="btn btn-primary"
               >
-                Submit
+                Search
               </button>
             </form>
           </div>

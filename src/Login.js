@@ -55,7 +55,7 @@ export default function Login() {
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
               <form onSubmit={handleLogin}>
                 <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
-                  <p className="lead fw-normal mb-0 me-3">User Sign in</p>
+                  <h5 className="mb-0 text-uppercase">User Sign in</h5>
                 </div>
 
                 <div className="divider d-flex align-items-center my-4">
@@ -72,7 +72,7 @@ export default function Login() {
                     placeholder="Enter your email address"
                     required
                   />
-                  <label className="form-label" for="username">
+                  <label className="form-label" htmlFor="username">
                     Email address
                   </label>
                 </div>
@@ -86,12 +86,12 @@ export default function Login() {
                     placeholder="*****"
                     required
                   />
-                  <label className="form-label" for="password">
+                  <label className="form-label" htmlFor="password">
                     Password
                   </label>
                 </div>
 
-                <div className="d-flex justify-content-between align-items-center">
+                {/* <div className="d-flex justify-content-between align-items-center">
                   <div className="form-check mb-0">
                     <input
                       className="form-check-input me-2"
@@ -104,8 +104,7 @@ export default function Login() {
                       Remember me
                     </label>
                   </div>
-                  {/* <!-- <a href="#!" className="text-body">Forgot password?</a> --> */}
-                </div>
+                </div> */}
 
                 <div className="text-center text-lg-start mt-4 pt-2">
                   <button

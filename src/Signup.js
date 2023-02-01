@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { REGEX_TEXT } from "./constant/constant";
 import "./style/signup.css";
 
 export default function Signup() {
@@ -52,8 +53,8 @@ export default function Signup() {
   return (
     <div>
       <section>
-        <div className="mask d-flex align-items-center h-100 gradient-custom-3">
-          <div className="container h-100">
+        <div className="mask d-flex align-items-center h-100 gradient-custom-3 mt-2">
+          <div className="container h-100 ">
             <div className="row d-flex justify-content-center align-items-center h-100">
               <div className="col-12 col-md-9 col-lg-7 col-xl-6">
                 <div className="card" style={{ borderRadius: "15px" }}>
@@ -63,9 +64,9 @@ export default function Signup() {
                         {error}
                       </div>
                     )}
-                    <h2 className="text-uppercase text-center mb-5">
+                    <h4 className="text-uppercase text-center mb-5">
                       Create an account
-                    </h2>
+                    </h4>
 
                     <form onSubmit={handleUserRegistration}>
                       <div className="form-outline mb-4">
@@ -74,9 +75,11 @@ export default function Signup() {
                           name="firstName"
                           id="firstName"
                           className="form-control form-control-lg"
+                          pattern={REGEX_TEXT}
+                          title="Please enter a valid name"
                           required
                         />
-                        <label className="form-label" for="firstName">
+                        <label className="form-label" htmlFor="firstName">
                           Your First Name
                         </label>
                       </div>
@@ -87,9 +90,11 @@ export default function Signup() {
                           name="lastName"
                           id="lastName"
                           className="form-control form-control-lg"
+                          pattern={REGEX_TEXT}
+                          title="Please enter a valid name"
                           required
                         />
-                        <label className="form-label" for="lastName">
+                        <label className="form-label" htmlFor="lastName">
                           Your Last Name
                         </label>
                       </div>
@@ -102,20 +107,20 @@ export default function Signup() {
                           className="form-control form-control-lg"
                           required
                         />
-                        <label className="form-label" for="emailAddress">
+                        <label className="form-label" htmlFor="emailAddress">
                           Your Email
                         </label>
                       </div>
 
                       <div className="form-outline mb-4">
                         <input
-                          type="text"
+                          type="number"
                           name="mobileNumber"
                           id="mobileNumber"
                           className="form-control form-control-lg"
                           required
                         />
-                        <label className="form-label" for="mobileNumber">
+                        <label className="form-label" htmlFor="mobileNumber">
                           Mobile Number
                         </label>
                       </div>
@@ -128,7 +133,7 @@ export default function Signup() {
                           className="form-control form-control-lg"
                           required
                         />
-                        <label className="form-label" for="password">
+                        <label className="form-label" htmlFor="password">
                           Password
                         </label>
                       </div>
@@ -141,7 +146,7 @@ export default function Signup() {
                           className="form-control form-control-lg"
                           required
                         />
-                        <label className="form-label" for="password_repeat">
+                        <label className="form-label" htmlFor="password_repeat">
                           Repeat your password
                         </label>
                       </div>

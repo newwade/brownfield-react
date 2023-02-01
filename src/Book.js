@@ -45,29 +45,30 @@ function Book() {
         }
         requestData.push(Object.fromEntries(formData));
       });
-
-      const isRedundant = requestData.every((val, i, arr) => {
-        return (
-          JSON.stringify(
-            (({ firstName, lastName, gender }) => ({
-              firstName,
-              lastName,
-              gender,
-            }))(val)
-          ) ===
-          JSON.stringify(
-            (({ firstName, lastName, gender }) => ({
-              firstName,
-              lastName,
-              gender,
-            }))(arr[0])
-          )
-        );
-      });
-      if (isRedundant) {
-        throw new Error(
-          "Passengers with same firstname, lastname found. Please check the passenger details."
-        );
+      if (requestData.length > 1) {
+        const isRedundant = requestData.every((val, i, arr) => {
+          return (
+            JSON.stringify(
+              (({ firstName, lastName, gender }) => ({
+                firstName,
+                lastName,
+                gender,
+              }))(val)
+            ) ===
+            JSON.stringify(
+              (({ firstName, lastName, gender }) => ({
+                firstName,
+                lastName,
+                gender,
+              }))(arr[0])
+            )
+          );
+        });
+        if (isRedundant) {
+          throw new Error(
+            "Passengers with same firstname, lastname found. Please check the passenger details."
+          );
+        }
       }
       dispatch(SELECT_FLIGHT(flight));
       const res = dispatch(ADD_PASSENGER(requestData));
@@ -110,7 +111,7 @@ function Book() {
     <div className="container">
       <ToastContainer
         position="top-center"
-        autoClose={1000}
+        autoClose={1500}
         hideProgressBar={true}
         newestOnTop={true}
       />

@@ -116,7 +116,7 @@ function Payment() {
                     className="card__input cardholderName"
                     type="text"
                     placeholder="Name"
-                    pattern="^[A-Za-z]+$"
+                    pattern="^[A-Za-z]+([ ]*[A-Za-z])+$"
                     title="invalid name"
                     required
                   />

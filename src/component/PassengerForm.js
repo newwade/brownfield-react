@@ -86,7 +86,7 @@ function PassengerForm(props) {
       <form className="passenger_form" id="passenger_form">
         <div className="form-row row">
           <div className="col-sm-4 mb-3">
-            <label for="firstName">First name</label>
+            <label htmlFor="firstName">First name</label>
             <input
               type="text"
               className="form-control "
@@ -97,7 +97,7 @@ function PassengerForm(props) {
             />
           </div>
           <div className="col-sm-4 mb-3">
-            <label for="lastName">Last name</label>
+            <label htmlFor="lastName">Last name</label>
             <input
               type="text"
               className="form-control "
@@ -108,7 +108,7 @@ function PassengerForm(props) {
             />
           </div>
           <div className="col-md-4 mb-3">
-            <label for="mobileNumber">Phone</label>
+            <label htmlFor="mobileNumber">Phone</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">#</span>
@@ -120,14 +120,12 @@ function PassengerForm(props) {
                 name="mobileNumber"
                 placeholder="+91"
                 aria-describedby="inputGroupPrepend3"
-                min={10}
-                max={10}
                 required
               />
             </div>
           </div>
           <div className="col-md-6 mb-3">
-            <label for="gender">Gender</label>
+            <label htmlFor="gender">Gender</label>
             <select
               className="form-control"
               id="gender"
@@ -141,7 +139,7 @@ function PassengerForm(props) {
             </select>
           </div>
           <div className="col-md-6 mb-3">
-            <label for="emailAddress">Email</label>
+            <label htmlFor="emailAddress">Email</label>
             <input
               type="email"
               className="form-control "
