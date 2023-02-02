@@ -50,6 +50,10 @@ export default function Signup() {
       console.log(error);
     }
   };
+  function lettersOnly(input) {
+    let regex = /[^a-zA-z]/gi;
+    input.target.value = input.target.value.replace(regex, "");
+  }
   return (
     <div>
       <section>
@@ -78,6 +82,9 @@ export default function Signup() {
                           pattern={REGEX_TEXT}
                           title="Please enter a valid name"
                           required
+                          onKeyUp={(e) => {
+                            lettersOnly(e);
+                          }}
                         />
                         <label className="form-label" htmlFor="firstName">
                           Your First Name
@@ -93,6 +100,9 @@ export default function Signup() {
                           pattern={REGEX_TEXT}
                           title="Please enter a valid name"
                           required
+                          onKeyUp={(e) => {
+                            lettersOnly(e);
+                          }}
                         />
                         <label className="form-label" htmlFor="lastName">
                           Your Last Name

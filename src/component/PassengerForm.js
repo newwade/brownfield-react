@@ -80,6 +80,10 @@ function PassengerForm(props) {
   //     }
   //     return forms;
   //   };
+  function lettersOnly(input) {
+    let regex = /[^a-zA-z]/gi;
+    input.target.value = input.target.value.replace(regex, "");
+  }
   return (
     <div className="bg-light mb-2 p-2 rounded ">
       <p>Passenger {p_no}</p>
@@ -94,6 +98,9 @@ function PassengerForm(props) {
               name="firstName"
               placeholder="First name"
               required
+              onKeyUp={(e) => {
+                lettersOnly(e);
+              }}
             />
           </div>
           <div className="col-sm-4 mb-3">
@@ -105,6 +112,9 @@ function PassengerForm(props) {
               name="lastName"
               placeholder="Last name"
               required
+              onKeyUp={(e) => {
+                lettersOnly(e);
+              }}
             />
           </div>
           <div className="col-md-4 mb-3">
