@@ -4,7 +4,7 @@ import "./style/ticket.css";
 
 function SuccessCheckin() {
   const [booking, setBooking] = useState();
-  const [setError] = useState("");
+  const [error, setError] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
   const base_url = process.env.REACT_APP_BASE_URL;

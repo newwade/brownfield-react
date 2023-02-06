@@ -1,16 +1,25 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Slide, toast, ToastContainer } from "react-toastify";
 
 function Checkin() {
   const [booking, setBooking] = useState();
+  const [loading] = useState(false);
   const [passenger, setPassenger] = useState();
   const [confirm, setConfirm] = useState(false);
   const [checkInDisabled, SetCheckInDisabled] = useState(false);
-  const [setError] = useState("");
+  const [error, setError] = useState("");
   const closeRef = useRef();
   const navigate = useNavigate();
   const base_url = process.env.REACT_APP_BASE_URL;
+  const user = useSelector((state) => state.user.data);
+
+  useEffect(() => {
+    if (!user) {
+      return navigate("/login");
+    }
+  });
 
   const fetchBooking = async (e) => {
     e.preventDefault();
@@ -150,7 +159,7 @@ function Checkin() {
                   <p className="card-text">{passenger.mobileNumber}</p>
                   <button
                     type="button"
-                    className={`btn ${
+                    className={`btn ${loading && "disabled"} ${
                       passenger.checked_in || checkInDisabled
                         ? "disabled btn-secondary"
                         : "btn-primary"

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./style/success.css";
@@ -6,13 +6,33 @@ import "./style/success.css";
 function SuccessBooking() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const base_url = process.env.REACT_APP_BASE_URL;
   const user = useSelector((state) => state.user.data);
+
+  const handleFetchBooking = async () => {
+    try {
+      const response = await fetch(`${base_url}/api/v1/book/${id}`);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      setError(error.message);
+      navigate("*", { replace: true });
+    }
+  };
 
   useEffect(() => {
     if (!user) {
       return navigate("/login");
     }
   });
+
+  useEffect(() => {
+    handleFetchBooking();
+  }, []);
 
   return (
     <div className="container booking_confirm">

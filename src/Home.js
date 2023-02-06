@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Home() {
   const [flights, setFlights] = useState([]);
   const [count, setCount] = useState(1);
-  const [setError] = useState("");
+  const [error, setError] = useState("");
   const [states] = useState([
     "chennai",
     "delhi",
