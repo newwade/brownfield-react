@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SET_COUNT } from "./store/flight/flightSlice";
-import { ToastContainer, toast, Slide, Flip } from "react-toastify";
+import { ToastContainer, toast, Slide } from "react-toastify";
 import "./style/home.css";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const [flights, setFlights] = useState([]);
   const [count, setCount] = useState(1);
-  const [error, setError] = useState("");
-  const [states, setState] = useState([
+  const [setError] = useState("");
+  const [states] = useState([
     "chennai",
     "delhi",
     "mumbai",
@@ -211,60 +211,6 @@ export default function Home() {
         style={{ marginTop: "20%" }}
         className="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary"
       ></div>
-      {/* <main classNameName="my-form">
-        <div classNameName="container align-center col-sm-8">
-          <div classNameName="row justify-content-center">
-            <div classNameName="col-md-12">
-              <div classNameName="card border-light w-auto special-card">
-                <div classNameName="card-header border-light text-center">
-                  Search Flights
-                </div>
-                <div classNameName="card-body">
-                  <form name="searchFlightsForm" method="post" role="form">
-                    <div classNameName="row searchForm">
-                      <div classNameName="col-lg-12">
-                        <div classNameName="row">
-                          <div classNameName="col-md-2 col-sm-3 col-sm-12 ">
-                            <input
-                              classNameName="form-control"
-                              id="origin"
-                              name="origin"
-                              placeholder="Origin"
-                              type="text"
-                            />
-                          </div>
-                          <div classNameName="col-sm-2 col-md-3 col-sm-12">
-                            <input
-                              classNameName="form-control"
-                              id="destination"
-                              name="destination"
-                              placeholder="Destination"
-                              type="text"
-                            />
-                          </div>
-                          <div classNameName="col-sm-2 col-md-3 col-sm-12 ">
-                            <input
-                              type="date"
-                              id="date"
-                              classNameName="form-control search-slt"
-                              placeholder="Travel Date"
-                            />
-                          </div>
-                          <div classNameName="col-sm-2 col-md-3 col-sm-12">
-                            <button type="submit" classNameName="btn btn-primary">
-                              Search Flight
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main> */}
     </div>
   );
 }

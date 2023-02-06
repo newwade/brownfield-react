@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { LOG_IN } from "./store/auth/authSlice";
 import "./style/login.css";
 
@@ -8,7 +8,6 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const user = useSelector((state) => state.user.loggedIn);
   const base_url = process.env.REACT_APP_BASE_URL;
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -49,7 +48,7 @@ export default function Login() {
               <img
                 src="https://www.freepnglogos.com/uploads/plane-png/clipart-image-aeroplane-impremedia-30.png"
                 className="img-fluid"
-                alt="Sample image"
+                alt="Sample"
               />
             </div>
             <div className="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
@@ -125,52 +124,6 @@ export default function Login() {
         </div>
         <div className="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-5 px-2 px-xl-6 bg-primary"></div>
       </section>
-      {/* <div classNameName="row">
-        <div classNameName="col-md-4 offset-md-4">
-          {error && <div classNameName="alert alert-danger">{error}</div>}
-          <div classNameName="card">
-            <div classNameName="mt-2 mb-2">
-              <h4 classNameName="text-center fw-normal">Sign in</h4>
-            </div>
-            <div classNameName="card-body">
-              <form onSubmit={handleLogin} classNameName="form-horizontal">
-                <div classNameName="form-group mb-3">
-                  <label classNameName="control-label"> Email</label>
-                  <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    classNameName="form-control"
-                    placeholder="Enter email address"
-                  />
-                </div>
-
-                <div classNameName="form-group mb-3">
-                  <label classNameName="control-label"> Password</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    classNameName="form-control"
-                    placeholder="Enter password"
-                  />
-                </div>
-                <div classNameName="form-group row justify-content-center mb-3">
-                  <button type="submit" classNameName="btn btn-primary col-11">
-                    Login
-                  </button>
-                </div>
-                <div classNameName="text-center">
-                  <p classNameName="">
-                    Don't have an account?
-                    <Link to="/register">Create an account</Link>
-                  </p>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }

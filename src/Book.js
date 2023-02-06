@@ -13,7 +13,7 @@ function Book() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [setError] = useState("");
   const [flight, setFlight] = useState();
   const base_url = process.env.REACT_APP_BASE_URL;
 

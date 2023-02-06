@@ -29,7 +29,6 @@ export const flightSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const {
   SELECT_FLIGHT,
   REMOVE_FLIGHT,

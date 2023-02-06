@@ -8,7 +8,7 @@ import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 function UserBooking() {
   const { data: user, loggedIn } = useSelector((state) => state.user);
   const [bookingData, setBookingData] = useState([]);
-  const [error, setError] = useState("");
+  const [setError] = useState("");
   const [loading, setLoading] = useState(false);
   const base_url = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();

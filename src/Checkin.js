@@ -1,18 +1,15 @@
 import React, { useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Slide, toast, ToastContainer } from "react-toastify";
 
 function Checkin() {
   const [booking, setBooking] = useState();
-  const [loading, setLoading] = useState(false);
   const [passenger, setPassenger] = useState();
   const [confirm, setConfirm] = useState(false);
   const [checkInDisabled, SetCheckInDisabled] = useState(false);
-  const [error, setError] = useState("");
+  const [setError] = useState("");
   const closeRef = useRef();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const base_url = process.env.REACT_APP_BASE_URL;
 
   const fetchBooking = async (e) => {
@@ -153,7 +150,7 @@ function Checkin() {
                   <p className="card-text">{passenger.mobileNumber}</p>
                   <button
                     type="button"
-                    className={`btn ${loading && "disabled"} ${
+                    className={`btn ${
                       passenger.checked_in || checkInDisabled
                         ? "disabled btn-secondary"
                         : "btn-primary"

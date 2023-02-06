@@ -106,6 +106,7 @@ function Payment() {
                     src="https://img.icons8.com/color/48/000000/visa.png"
                     width="64px"
                     height="60px"
+                    alt="card"
                   />
                 </div>
                 <div className="form-group">
