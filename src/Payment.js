@@ -1,7 +1,9 @@
+import axios from "./axios/axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Slide } from "react-toastify";
+import { LOG_OUT } from "./store/auth/authSlice";
 import {
   REMOVE_FLIGHT,
   REMOVE_PASSENGER,
@@ -12,15 +14,15 @@ import "./style/payment.css";
 function Payment() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.data);
+  const { loggedIn, data: token } = useSelector((state) => state.user);
   const { data: flight, passengers } = useSelector((state) => state.flight);
-  const base_url = process.env.REACT_APP_BASE_URL;
+  const [error, setError] = useState("");
   const [cvv, setCvv] = useState("");
   const [cardNumber, setCardNumber] = useState("");
 
   useEffect(() => {
-    if (!user) {
-      return navigate("/login");
+    if (!loggedIn) {
+      return navigate("/login", { replace: true });
     }
   });
 
@@ -31,30 +33,24 @@ function Payment() {
       const paymentData = Object.fromEntries(formData);
       const request = {
         flightId: flight.id,
-        userId: user.id,
         passengers: passengers,
         payment: paymentData,
       };
       console.log(request);
-      const settings = {
-        method: "POST",
-        body: JSON.stringify(request),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      };
-      const response = await fetch(`${base_url}/api/v1/book/save`, settings);
-      const data = await response.json();
-      if (response.status !== 201) {
-        throw new Error(data.message);
-      }
-      if (response.status === 201 && data) {
-        console.log(data);
+      const response = await axios.post(
+        `/api/v1/book/save`,
+        JSON.stringify(request),
+        {
+          headers: {
+            Authorization: `Bearer ${token.token}`,
+          },
+        }
+      );
+      if (response.status === 201 && response.data) {
         dispatch(RESET_COUNT());
         dispatch(REMOVE_FLIGHT());
         dispatch(REMOVE_PASSENGER());
-        navigate(`/payment/success/${data.payment.paymentId}`, {
+        navigate(`/payment/success/${response.data.bookingId}`, {
           replace: true,
         });
       }
@@ -63,6 +59,11 @@ function Payment() {
         transition: Slide,
       });
       console.log(error);
+      setError(error.response.data.message);
+      let err_status = error.response.status;
+      if (err_status === 403) {
+        dispatch(LOG_OUT());
+      }
     }
   };
   return (

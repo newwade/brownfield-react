@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "./axios/axios";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./style/success.css";
@@ -7,20 +8,21 @@ function SuccessBooking() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const base_url = process.env.REACT_APP_BASE_URL;
-  const user = useSelector((state) => state.user.data);
-
+  const token = useSelector((state) => state.user.data.token);
+  const user = useSelector((state) => state.user.loggedIn);
   const handleFetchBooking = async () => {
     try {
-      const response = await fetch(`${base_url}/api/v1/book/${id}`);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
+      const response = await axios.get(`/api/v1/book/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     } catch (error) {
-      console.log(error);
-      setError(error.message);
-      navigate("*", { replace: true });
+      setError(error.response.data.message);
+      let err_status = error.response.status;
+      if (err_status === 404) {
+        navigate("*", { replace: true });
+      }
     }
   };
 

@@ -1,15 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "../axios/axios";
 import { useSelector, useDispatch } from "react-redux";
 import { LOG_OUT } from "../store/auth/authSlice";
 import { Link } from "react-router-dom";
 
 function Navbar() {
-  const user = useSelector((state) => state.user.data);
+  const [error, setError] = useState();
+  const [user, setUser] = useState();
+  const token = useSelector((state) => state.user.data);
   const dispatch = useDispatch();
 
   const handleClick = () => {
     dispatch(LOG_OUT());
+    setUser();
   };
+
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get(`/api/v1/user/token`, {
+        headers: {
+          Authorization: `Bearer ${token.token}`,
+        },
+      });
+      if (response.status === 200) {
+        setUser(response.data);
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
+  useEffect(() => {
+    if (token) {
+      fetchUser();
+    }
+  }, [token]);
 
   return (
     <nav className="navbar navbar-expand-lg bg-primary">

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import axios from "./axios/axios";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Slide, toast, ToastContainer } from "react-toastify";
@@ -12,11 +13,10 @@ function Checkin() {
   const [error, setError] = useState("");
   const closeRef = useRef();
   const navigate = useNavigate();
-  const base_url = process.env.REACT_APP_BASE_URL;
-  const user = useSelector((state) => state.user.data);
+  const { data: token, loggedIn } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!user) {
+    if (!loggedIn) {
       return navigate("/login");
     }
   });
@@ -25,13 +25,13 @@ function Checkin() {
     e.preventDefault();
     try {
       const pnr = e.target.pnr.value;
-      const response = await fetch(`${base_url}/api/v1/book/pnr/${pnr}`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      if (response.ok) {
+      const response = await axios.get(`/api/v1/book/pnr/${pnr}`, {
+        headers: {
+          Authorization: `Bearer ${token.token}`,
+        },
+      });
+      if (response.status === 200) {
+        const data = response.data;
         const departure_date_time = new Date(
           `${data.flightDate}T${data.departureTime}`
         );
@@ -45,10 +45,10 @@ function Checkin() {
       }
     } catch (error) {
       console.log(error);
-      toast.warning(error.message, {
+      toast.warning(error.response.data.message, {
         transition: Slide,
       });
-      setError(error.message);
+      setError(error.response.data.message);
     }
   };
 
@@ -62,29 +62,26 @@ function Checkin() {
           passengerId: passenger.passengerId,
         },
       };
-      const settings = {
-        method: "POST",
-        body: JSON.stringify(requestData),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      };
-      const response = await fetch(`${base_url}/api/v1/checkin/save`, settings);
-      const data = await response.json();
-      if (response.status !== 201) {
-        throw new Error(data);
-      }
-      if (response.status === 201 && data) {
+
+      const response = await axios.post(
+        `/api/v1/checkin/save`,
+        JSON.stringify(requestData),
+        {
+          headers: {
+            Authorization: `Bearer ${token.token}`,
+          },
+        }
+      );
+      if (response.status === 201 && response.data) {
         closeRef.current.click();
-        navigate(`/checkin/success/${data.checkinId}`);
+        navigate(`/checkin/success/${response.data.checkinId}`);
       }
     } catch (error) {
       console.log(error);
-      toast.warning(error.message, {
+      toast.warning(error.response.data.message, {
         transition: Slide,
       });
-      setError(error.message);
+      setError(error.response.data.message);
     }
   };
   return (

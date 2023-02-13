@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "./axios/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { REGEX_TEXT } from "./constant/constant";
 import "./style/signup.css";
@@ -8,7 +9,6 @@ export default function Signup() {
   const user = useSelector((state) => state.user.loggedIn);
   const [error, setError] = useState();
   const navigate = useNavigate();
-  const base_url = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     if (user) {
@@ -25,28 +25,16 @@ export default function Signup() {
         throw new Error("passwords do not match");
       }
       const formData = new FormData(e.target);
-      const requestData = JSON.stringify(Object.fromEntries(formData));
-      const settings = {
-        method: "POST",
-        body: requestData,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      };
-      const response = await fetch(
-        `${base_url}/api/v1/user/register`,
-        settings
+      const requestData = Object.fromEntries(formData);
+      const response = await axios.post(
+        `/api/v1/user/register`,
+        JSON.stringify(requestData)
       );
-      const data = await response.json();
-      if (response.status !== 201) {
-        throw new Error(data.message);
-      }
-      if (response.status === 201 && data) {
+      if (response.status === 201) {
         navigate("/login");
       }
     } catch (error) {
-      setError(error.message);
+      setError(error.response.data.message);
       console.log(error);
     }
   };

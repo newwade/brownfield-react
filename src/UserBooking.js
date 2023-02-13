@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "./axios/axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
 function UserBooking() {
-  const { data: user, loggedIn } = useSelector((state) => state.user);
+  const { data: token, loggedIn } = useSelector((state) => state.user);
   const [bookingData, setBookingData] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,17 +17,16 @@ function UserBooking() {
   const fetchUserBookingData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${base_url}/api/v1/book/user/${user.id}`);
-      let data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      if (response.ok) {
-        setBookingData(data);
+      const response = await axios.get(`/api/v1/book/user`, {
+        headers: {
+          Authorization: `Bearer ${token.token}`,
+        },
+      });
+      if (response.status === 200) {
+        setBookingData(response.data);
       }
     } catch (error) {
-      console.log(error);
-      setError(error.message);
+      setError(error.response.data.message);
     } finally {
       setLoading(false);
     }
@@ -34,22 +34,17 @@ function UserBooking() {
 
   const handleCancelBooking = async (bookingId) => {
     try {
-      const settings = {
-        method: "DELETE",
-      };
-      const response = await fetch(
-        `${base_url}/api/v1/book/cancel/${bookingId}`,
-        settings
-      );
-      if (!response.ok) {
-        throw new Error("Something went wrong. Please try again");
-      }
-      if (response.ok) {
+      const response = await axios.delete(`/api/v1/book/cancel/${bookingId}`, {
+        headers: {
+          Authorization: `Bearer ${token.token}`,
+        },
+      });
+      if (response.status === 200) {
         fetchUserBookingData();
       }
     } catch (error) {
       console.log(error);
-      setError(error.message);
+      setError(error.response.data.message);
       toast.warning(error.message, {
         transition: Slide,
       });

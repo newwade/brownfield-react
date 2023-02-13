@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import axios from "./axios/axios";
+import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./style/ticket.css";
 
@@ -7,22 +9,23 @@ function SuccessCheckin() {
   const [error, setError] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
-  const base_url = process.env.REACT_APP_BASE_URL;
-
+  const token = useSelector((state) => state.user.data.token);
   const handleFetchCheckin = async () => {
     try {
-      const response = await fetch(`${base_url}/api/v1/checkin/${id}`);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      if (response.ok) {
-        setBooking(data);
+      const response = await axios.get(`/api/v1/checkin/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        setBooking(response.data);
       }
     } catch (error) {
-      console.log(error);
-      setError(error.message);
-      navigate("*", { replace: true });
+      setError(error.response.data.message);
+      let err_status = error.response.status;
+      if (err_status === 404) {
+        navigate("*", { replace: true });
+      }
     }
   };
 

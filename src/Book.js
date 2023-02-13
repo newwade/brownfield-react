@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
+import axios from "./axios/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import PassengerForm from "./component/PassengerForm";
 import { REGEX_EMAIL, REGEX_PHONE } from "./constant/constant";
 import { SELECT_FLIGHT, ADD_PASSENGER } from "./store/flight/flightSlice";
 import { ToastContainer, toast, Slide } from "react-toastify";
+import { LOG_OUT } from "./store/auth/authSlice";
 
 function Book() {
   const { count } = useSelector((state) => state.flight);
+  const token = useSelector((state) => state.user.data);
   const user = useSelector((state) => state.user.loggedIn);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -15,11 +18,10 @@ function Book() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [flight, setFlight] = useState();
-  const base_url = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     if (!user) {
-      return navigate("/login");
+      return navigate("/login", { replace: true });
     }
   });
 
@@ -89,18 +91,25 @@ function Book() {
 
   const getFlight = async () => {
     try {
-      const response = await fetch(`${base_url}/api/v1/flight/${id}`);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      if (response.ok) {
-        setFlight(data);
+      const response = await axios.get(`/api/v1/flight/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token.token}`,
+        },
+      });
+      console.log(response);
+      if (response.status === 200) {
+        setFlight(response.data);
       }
     } catch (error) {
       console.log(error);
-      setError(error.message);
-      navigate("*", { replace: true });
+      setError(error.response.data.message);
+      let err_status = error.response.status;
+      if (err_status === 404) {
+        navigate("*", { replace: true });
+      }
+      if (err_status === 403) {
+        dispatch(LOG_OUT());
+      }
     }
   };
 

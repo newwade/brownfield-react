@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import axios from "./axios/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { LOG_IN } from "./store/auth/authSlice";
@@ -8,31 +9,21 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const base_url = process.env.REACT_APP_BASE_URL;
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData(e.target);
-      const requestData = JSON.stringify(Object.fromEntries(formData));
-      const settings = {
-        method: "POST",
-        body: requestData,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      };
-      const response = await fetch(`${base_url}/api/v1/user/login`, settings);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      if (response.ok && data) {
-        dispatch(LOG_IN(data));
+      const requestData = Object.fromEntries(formData);
+      const response = await axios.post(
+        `/api/v1/user/login`,
+        JSON.stringify(requestData)
+      );
+      if (response.data) {
+        dispatch(LOG_IN(response.data));
         navigate(-1, { replace: true });
       }
     } catch (error) {
-      setError(error.message);
+      setError(error.response.data.message);
       console.log(error);
     }
   };
