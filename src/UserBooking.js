@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "./axios/axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast, Slide } from "react-toastify";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import { LOG_OUT } from "./store/auth/authSlice";
 
 function UserBooking() {
   const { data: token, loggedIn } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [bookingData, setBookingData] = useState([]);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const base_url = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
 
   const fetchUserBookingData = async () => {
@@ -26,7 +26,11 @@ function UserBooking() {
         setBookingData(response.data);
       }
     } catch (error) {
-      setError(error.response.data.message);
+      console.log(error);
+      let err_status = error.response.status;
+      if (err_status === 403) {
+        dispatch(LOG_OUT());
+      }
     } finally {
       setLoading(false);
     }
@@ -44,10 +48,13 @@ function UserBooking() {
       }
     } catch (error) {
       console.log(error);
-      setError(error.response.data.message);
-      toast.warning(error.message, {
+      toast.warning(error.response.data.message, {
         transition: Slide,
       });
+      let err_status = error.response.status;
+      if (err_status === 403) {
+        dispatch(LOG_OUT());
+      }
     }
   };
 

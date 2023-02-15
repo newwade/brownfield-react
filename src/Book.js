@@ -16,12 +16,11 @@ function Book() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [flight, setFlight] = useState();
 
   useEffect(() => {
     if (!user) {
-      return navigate("/login", { replace: true });
+      return navigate("/login");
     }
   });
 
@@ -80,7 +79,6 @@ function Book() {
       }
     } catch (error) {
       console.log(error);
-      setError(error.message);
       toast.warning(error.message, {
         transition: Slide,
       });
@@ -102,7 +100,6 @@ function Book() {
       }
     } catch (error) {
       console.log(error);
-      setError(error.response.data.message);
       let err_status = error.response.status;
       if (err_status === 404) {
         navigate("*", { replace: true });

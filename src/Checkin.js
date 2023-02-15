@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "./axios/axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Slide, toast, ToastContainer } from "react-toastify";
+import { LOG_OUT } from "./store/auth/authSlice";
 
 function Checkin() {
   const [booking, setBooking] = useState();
@@ -10,10 +11,10 @@ function Checkin() {
   const [passenger, setPassenger] = useState();
   const [confirm, setConfirm] = useState(false);
   const [checkInDisabled, SetCheckInDisabled] = useState(false);
-  const [error, setError] = useState("");
   const closeRef = useRef();
   const navigate = useNavigate();
   const { data: token, loggedIn } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!loggedIn) {
@@ -48,7 +49,10 @@ function Checkin() {
       toast.warning(error.response.data.message, {
         transition: Slide,
       });
-      setError(error.response.data.message);
+      let err_status = error.response.status;
+      if (err_status === 403) {
+        dispatch(LOG_OUT());
+      }
     }
   };
 
@@ -73,7 +77,6 @@ function Checkin() {
         }
       );
       if (response.status === 201 && response.data) {
-        closeRef.current.click();
         navigate(`/checkin/success/${response.data.checkinId}`);
       }
     } catch (error) {
@@ -81,7 +84,12 @@ function Checkin() {
       toast.warning(error.response.data.message, {
         transition: Slide,
       });
-      setError(error.response.data.message);
+      let err_status = error.response.status;
+      if (err_status === 403) {
+        dispatch(LOG_OUT());
+      }
+    } finally {
+      closeRef.current.click();
     }
   };
   return (

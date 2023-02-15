@@ -12,7 +12,6 @@ import SuccessCheckin from "./SuccessCheckin";
 import UserBooking from "./UserBooking";
 
 function App() {
-  console.log("app");
   return (
     <>
       <Navbar />

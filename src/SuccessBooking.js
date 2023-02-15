@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "./axios/axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./style/success.css";
+import { LOG_OUT } from "./store/auth/authSlice";
 
 function SuccessBooking() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [error, setError] = useState("");
-  const token = useSelector((state) => state.user.data.token);
+  const token = useSelector((state) => state.user.data?.token);
   const user = useSelector((state) => state.user.loggedIn);
+  const dispatch = useDispatch();
   const handleFetchBooking = async () => {
     try {
       const response = await axios.get(`/api/v1/book/${id}`, {
@@ -18,10 +19,12 @@ function SuccessBooking() {
         },
       });
     } catch (error) {
-      setError(error.response.data.message);
       let err_status = error.response.status;
       if (err_status === 404) {
         navigate("*", { replace: true });
+      }
+      if (err_status === 403) {
+        dispatch(LOG_OUT());
       }
     }
   };

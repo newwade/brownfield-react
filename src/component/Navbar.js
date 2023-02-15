@@ -5,7 +5,6 @@ import { LOG_OUT } from "../store/auth/authSlice";
 import { Link } from "react-router-dom";
 
 function Navbar() {
-  const [error, setError] = useState();
   const [user, setUser] = useState();
   const token = useSelector((state) => state.user.data);
   const dispatch = useDispatch();
@@ -26,7 +25,7 @@ function Navbar() {
         setUser(response.data);
       }
     } catch (error) {
-      setError(error.response.data.message);
+      console.log(error);
     }
   };
   useEffect(() => {

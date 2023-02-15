@@ -10,7 +10,6 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Home() {
   const [flights, setFlights] = useState([]);
   const [count, setCount] = useState(1);
-  const [error, setError] = useState("");
   const [states] = useState([
     "chennai",
     "delhi",
@@ -24,7 +23,6 @@ export default function Home() {
   const [destination, setDestination] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const base_url = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {}, []);
 
@@ -33,27 +31,17 @@ export default function Home() {
     try {
       const formData = new FormData(e.target);
       setCount(e.target.passengers.value);
-      const requestData = JSON.stringify(Object.fromEntries(formData));
-      const settings = {
-        method: "POST",
-        body: requestData,
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      };
-      const response = await fetch(`${base_url}/api/v1/flight/find`, settings);
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      if (response.ok && data) {
-        setFlights(data);
+      const requestData = Object.fromEntries(formData);
+      const response = await axios.post(
+        `/api/v1/flight/find`,
+        JSON.stringify(requestData)
+      );
+      if (response.status === 200 && response.data) {
+        setFlights(response.data);
       }
     } catch (error) {
-      setError(error.message);
       setFlights([]);
-      toast.warning(error.message, {
+      toast.warning(error.response.data.message, {
         transition: Slide,
       });
       console.log(error);

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "./axios/axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./style/ticket.css";
+import { LOG_OUT } from "./store/auth/authSlice";
 
 function SuccessCheckin() {
   const [booking, setBooking] = useState();
-  const [error, setError] = useState("");
   const { id } = useParams();
   const navigate = useNavigate();
   const token = useSelector((state) => state.user.data.token);
+  const dispatch = useDispatch();
   const handleFetchCheckin = async () => {
     try {
       const response = await axios.get(`/api/v1/checkin/${id}`, {
@@ -21,10 +22,12 @@ function SuccessCheckin() {
         setBooking(response.data);
       }
     } catch (error) {
-      setError(error.response.data.message);
       let err_status = error.response.status;
       if (err_status === 404) {
         navigate("*", { replace: true });
+      }
+      if (err_status === 403) {
+        dispatch(LOG_OUT());
       }
     }
   };

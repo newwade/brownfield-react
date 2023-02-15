@@ -16,13 +16,12 @@ function Payment() {
   const dispatch = useDispatch();
   const { loggedIn, data: token } = useSelector((state) => state.user);
   const { data: flight, passengers } = useSelector((state) => state.flight);
-  const [error, setError] = useState("");
   const [cvv, setCvv] = useState("");
   const [cardNumber, setCardNumber] = useState("");
 
   useEffect(() => {
     if (!loggedIn) {
-      return navigate("/login", { replace: true });
+      return navigate("/login");
     }
   });
 
@@ -59,7 +58,6 @@ function Payment() {
         transition: Slide,
       });
       console.log(error);
-      setError(error.response.data.message);
       let err_status = error.response.status;
       if (err_status === 403) {
         dispatch(LOG_OUT());
