@@ -41,7 +41,6 @@ function Checkin() {
         if (date_now > departure_date_time || hours > 24 || hours < 1) {
           SetCheckInDisabled(true);
         }
-        console.log(hours);
         setBooking(data);
       }
     } catch (error) {

@@ -178,16 +178,8 @@ function SuccessCheckin() {
           </div>
           <div className="mt-5 d-flex justify-content-center gap-4">
             <Link to="/">
-              <button className=" btn btn-secondary ">Home</button>
+              <p className=""> Go back to Home</p>
             </Link>
-            <button
-              className=" btn btn-secondary"
-              onClick={() => {
-                window.print();
-              }}
-            >
-              Print
-            </button>
           </div>
         </div>
       )}

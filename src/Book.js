@@ -94,7 +94,6 @@ function Book() {
           Authorization: `Bearer ${token.token}`,
         },
       });
-      console.log(response);
       if (response.status === 200) {
         setFlight(response.data);
       }

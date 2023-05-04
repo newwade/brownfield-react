@@ -35,7 +35,6 @@ function Payment() {
         passengers: passengers,
         payment: paymentData,
       };
-      console.log(request);
       const response = await axios.post(
         `/api/v1/book/save`,
         JSON.stringify(request),

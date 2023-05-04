@@ -66,9 +66,9 @@ function PassengerForm(props) {
               value={gender}
               onChange={(e) => setGender(e.target.value)}
             >
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
+              <option>male</option>
+              <option>female</option>
+              <option>other</option>
             </select>
           </div>
           <div className="col-md-6 mb-3">
